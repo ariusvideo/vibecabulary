@@ -1,0 +1,13 @@
+# Build output
+.build/
+build/
+.swiftpm/
+.DS_Store
+
+# Personal CPMAI data and tooling: the glossary text is © PMI, licensed for personal use only
+Resources/cpmai-glossary.json
+build-data/
+tools/build_cpmai_glossary.py
+tools/draft_tags.py
+tools/tags.json
+PRIVATE-NOTES.md

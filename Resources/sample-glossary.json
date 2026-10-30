@@ -1,0 +1,158 @@
+{
+  "name": "Study Skills Sampler",
+  "version": "1.0",
+  "terms": [
+    {
+      "term": "active recall",
+      "aliases": ["retrieval practice"],
+      "definition": "Pulling information out of memory, for example by answering a question before checking the answer, instead of rereading it.",
+      "related": ["testing effect", "flashcard", "spaced repetition"],
+      "tags": ["Memory"],
+      "notes": [{"text": "Rereading feels productive but mostly builds familiarity. Recall builds memory."}]
+    },
+    {
+      "term": "spaced repetition",
+      "aliases": ["SRS", "spaced practice"],
+      "definition": "Reviewing material at gradually longer intervals, timed so each review lands just before you would forget it.",
+      "related": ["forgetting curve", "spacing effect", "Leitner system"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "spacing effect",
+      "definition": "The finding that study sessions spread out over time produce longer-lasting memory than the same total time crammed into one session.",
+      "related": ["spaced repetition", "cramming"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "forgetting curve",
+      "definition": "How memory of new material fades over time when it is not reviewed: fast at first, then more slowly.",
+      "related": ["spaced repetition", "memory strength"],
+      "tags": ["Memory"],
+      "notes": [{"text": "Formula: R = e^(−t / S), where R is the chance of recall, t is time since learning and S is memory strength."}]
+    },
+    {
+      "term": "memory strength",
+      "definition": "How resistant a memory is to fading. Each successful, effortful review makes it stronger.",
+      "related": ["forgetting curve", "desirable difficulty"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "testing effect",
+      "definition": "Taking a practice test improves later recall more than spending the same time studying, even without feedback.",
+      "related": ["active recall", "practice exam"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "desirable difficulty",
+      "definition": "A challenge during learning, such as spacing or mixing topics, that slows progress in the moment but improves long-term retention.",
+      "related": ["interleaving", "spacing effect"],
+      "tags": ["Techniques"]
+    },
+    {
+      "term": "interleaving",
+      "definition": "Mixing different topics or problem types within one study session instead of practicing one type at a time.",
+      "related": ["desirable difficulty", "blocked practice"],
+      "tags": ["Techniques"]
+    },
+    {
+      "term": "blocked practice",
+      "definition": "Practicing one skill or problem type repeatedly before moving to the next. It feels smooth but tends to transfer less well than interleaving.",
+      "related": ["interleaving"],
+      "tags": ["Techniques"]
+    },
+    {
+      "term": "elaboration",
+      "definition": "Explaining an idea in your own words and connecting it to what you already know, often by asking how and why.",
+      "related": ["Feynman technique", "concept map"],
+      "tags": ["Techniques"]
+    },
+    {
+      "term": "Feynman technique",
+      "definition": "Learning by teaching: explain a topic in plain language as if to a beginner, find the gaps where the explanation breaks down, then fill them.",
+      "related": ["elaboration", "metacognition"],
+      "tags": ["Techniques"]
+    },
+    {
+      "term": "chunking",
+      "definition": "Grouping separate pieces of information into larger meaningful units so they are easier to hold in mind.",
+      "related": ["working memory", "mnemonic"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "working memory",
+      "definition": "The small, short-term mental workspace that holds information while you use it. It can only juggle a few items at once.",
+      "related": ["chunking", "cognitive load"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "cognitive load",
+      "definition": "The amount of mental effort a task demands of working memory. Too much at once makes learning harder.",
+      "related": ["working memory"],
+      "tags": ["Memory"]
+    },
+    {
+      "term": "mnemonic",
+      "definition": "A memory aid, such as an acronym, rhyme or vivid image, that links new information to something easy to remember.",
+      "related": ["chunking"],
+      "tags": ["Techniques"]
+    },
+    {
+      "term": "flashcard",
+      "definition": "A card with a prompt on one side and the answer on the other, used for active recall.",
+      "related": ["active recall", "Leitner system"],
+      "tags": ["Tools"]
+    },
+    {
+      "term": "Leitner system",
+      "definition": "A way to schedule flashcards using boxes: cards you answer correctly move to a box reviewed less often, and missed cards go back to the first box.",
+      "related": ["flashcard", "spaced repetition"],
+      "tags": ["Tools"]
+    },
+    {
+      "term": "concept map",
+      "aliases": ["mind map"],
+      "definition": "A diagram of ideas connected by labeled links, used to see how the parts of a topic relate.",
+      "related": ["elaboration"],
+      "tags": ["Tools"]
+    },
+    {
+      "term": "practice exam",
+      "aliases": ["mock exam"],
+      "definition": "A full-length test taken under exam-like conditions to rehearse timing and find weak areas.",
+      "related": ["testing effect", "score rate"],
+      "tags": ["Planning"]
+    },
+    {
+      "term": "score rate",
+      "definition": "The share of practice questions answered correctly.",
+      "related": ["practice exam"],
+      "tags": ["Planning"],
+      "notes": [{"text": "Formula: correct answers / questions attempted."}]
+    },
+    {
+      "term": "Pomodoro technique",
+      "definition": "Working in focused blocks, traditionally 25 minutes, each followed by a short break.",
+      "related": ["cramming"],
+      "tags": ["Planning"]
+    },
+    {
+      "term": "cramming",
+      "aliases": ["massed practice"],
+      "definition": "Studying a large amount of material in one intensive session shortly before a test. It can help the next day but fades quickly.",
+      "related": ["spacing effect", "Pomodoro technique"],
+      "tags": ["Planning"]
+    },
+    {
+      "term": "metacognition",
+      "definition": "Thinking about your own thinking: judging what you know, what you don't, and which strategies work for you.",
+      "related": ["Feynman technique", "illusion of competence"],
+      "tags": ["Planning"]
+    },
+    {
+      "term": "illusion of competence",
+      "definition": "Feeling that you know material because it looks familiar, when you could not actually recall or apply it.",
+      "related": ["metacognition", "active recall"],
+      "tags": ["Planning"]
+    }
+  ]
+}
