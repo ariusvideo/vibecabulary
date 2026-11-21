@@ -47,7 +47,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>LSMinimumSystemVersion</key><string>$MIN_MACOS</string>
   <key>LSUIElement</key><true/>
   <key>NSHighResolutionCapable</key><true/>
-  <key>NSHumanReadableCopyright</key><string>© 2026 Steven Gladney. MIT License.</string>
+  <key>NSHumanReadableCopyright</key><string>© 2026 ariusvideo (Steven Gladney). MIT License.</string>
 </dict>
 </plist>
 PLIST
