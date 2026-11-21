@@ -7,6 +7,11 @@ or have any AI chatbot make one for you from your notes. Requires macOS 14 or la
 
 **Website:** [vibecabulary.app](https://vibecabulary.app) · **Download:** [Vibecabulary.dmg](https://github.com/ariusvideo/vibecabulary/releases/latest/download/Vibecabulary.dmg) (free; signed and notarized by Apple) · **Support:** support@vibecabulary.app · **Tip jar:** [Ko-fi](https://ko-fi.com/ariusvideo)
 
+<p align="center">
+  <img src="docs/screenshots/vibecabulary-definition.png" width="49%" alt="Vibecabulary's menu bar window: all terms A–Z on the left, and the definition of “illusion of competence” with its Planning tag and See also links on the right.">
+  <img src="docs/screenshots/vibecabulary-term-of-the-day.png" width="49%" alt="Vibecabulary's menu bar window with recent lookups, a daily lookup counter and the term of the day, “chunking”.">
+</p>
+
 ## Install
 1. Download `Vibecabulary.dmg` from the [latest release](https://github.com/ariusvideo/vibecabulary/releases/latest).
 2. Open it and drag **Vibecabulary** to **Applications**.
