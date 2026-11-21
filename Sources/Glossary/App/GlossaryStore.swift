@@ -30,8 +30,8 @@ final class GlossaryStore: ObservableObject {
     static var tagEditsURL: URL { supportDirectory.appendingPathComponent("tag-edits.json") }
 
     /// The CPMAI tags, offered as starters when a glossary has no tags of its own.
-    static let starterTags = ["Foundations", "Trustworthy AI", "Phase I", "Phase II", "Phase III",
-                              "Phase IV", "Phase V", "Phase VI"]
+    /// Offered when a glossary has no tags of its own.
+    static let starterTags = ["Key term", "Review", "Confusing", "Mastered"]
 
     init() {
         let defaults = UserDefaults.standard
@@ -87,14 +87,11 @@ final class GlossaryStore: ObservableObject {
 
     private var editKey: String { TagEdits.key(for: sourceURL) }
 
-    /// Tags offered in the editor: those this glossary uses (phases in order, then A–Z),
-    /// or the CPMAI starters if it has none.
+    /// Tags offered in the editor and used for badge colors: those this glossary uses
+    /// (its declared order, then A–Z), or the starters if it has none.
     var availableTags: [String] {
-        let used = Set(document.terms.flatMap(\.tags))
-        if used.isEmpty { return Self.starterTags }
-        let known = Self.starterTags.filter(used.contains)
-        let other = used.subtracting(known).sorted { $0.localizedStandardCompare($1) == .orderedAscending }
-        return known + other
+        let tags = document.orderedTags
+        return tags.isEmpty ? Self.starterTags : tags
     }
 
     func isTagEdited(_ entry: GlossaryEntry) -> Bool { tagEdits.isEdited(entry.term, in: editKey) }

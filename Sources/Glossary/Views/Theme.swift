@@ -185,63 +185,42 @@ extension GlossaryTheme {
 /// Solid badge fills. Badge text is always dark, so every fill is light enough to keep contrast high.
 struct BadgePalette: Sendable {
     var text: Color
-    var tagFills: [String: Color]
-    /// Fills for tags outside the eight known ones, picked by a stable hash of the tag name.
+    /// Fills for a glossary's tags in order: the first tag gets the first fill, and so on.
+    var tagFills: [Color]
+    /// Fills for tags past the ordered ones, picked by a stable hash of the tag name.
     var extraFills: [Color]
-    var pmi: Color
-    var course: Color
-    var otherSource: Color
+    var sourceFills: [Color]
+    /// The current glossary's tags in display order; set by ContentView.
+    var tagOrder: [String] = []
 
     func fill(forTag tag: String) -> Color {
-        if let color = tagFills[tag] { return color }
-        // `String.hashValue` is seeded per launch, so FNV-1a keeps a tag's color the same every time.
-        var hash: UInt64 = 0xCBF2_9CE4_8422_2325
-        for byte in tag.utf8 { hash = (hash ^ UInt64(byte)) &* 0x100_0000_01B3 }
-        return extraFills[Int(hash % UInt64(extraFills.count))]
+        if let i = tagOrder.firstIndex(of: tag), i < tagFills.count { return tagFills[i] }
+        return extraFills[Self.stableIndex(tag, count: extraFills.count)]
     }
 
     func fill(forSource source: String) -> Color {
-        switch source.lowercased() {
-        case "pmi": pmi
-        case "course": course
-        default: otherSource
-        }
+        sourceFills[Self.stableIndex(source.lowercased(), count: sourceFills.count)]
+    }
+
+    /// FNV-1a; `String.hashValue` is seeded per launch, so this keeps a color the same every time.
+    static func stableIndex(_ s: String, count: Int) -> Int {
+        var hash: UInt64 = 0xCBF2_9CE4_8422_2325
+        for byte in s.utf8 { hash = (hash ^ UInt64(byte)) &* 0x100_0000_01B3 }
+        return Int(hash % UInt64(count))
     }
 
     static let dark = BadgePalette(
         text: Color(hex: 0x1A1714),
-        tagFills: [
-            "Foundations": Color(hex: 0xA9C8FF),
-            "Trustworthy AI": Color(hex: 0xFFB0CB),
-            "Phase I": Color(hex: 0xFFD47E),
-            "Phase II": Color(hex: 0xC4E68F),
-            "Phase III": Color(hex: 0x8FDDEE),
-            "Phase IV": Color(hex: 0xCDB6FF),
-            "Phase V": Color(hex: 0xFFB58C),
-            "Phase VI": Color(hex: 0x8FEBC9),
-        ],
-        extraFills: [Color(hex: 0xE6D3A8), Color(hex: 0xB8D4D0), Color(hex: 0xE3BFE8), Color(hex: 0xD2D6A4)],
-        pmi: Color(hex: 0xDCD3C6),
-        course: Color(hex: 0xF0B76A),
-        otherSource: Color(hex: 0xC9CCD6))
+        tagFills: [0xA9C8FF, 0xFFB0CB, 0xFFD47E, 0xC4E68F, 0x8FDDEE, 0xCDB6FF, 0xFFB58C, 0x8FEBC9].map { Color(hex: $0) },
+        extraFills: [0xE6D3A8, 0xB8D4D0, 0xE3BFE8, 0xD2D6A4].map { Color(hex: $0) },
+        sourceFills: [0xC9CCD6, 0xDCD3C6, 0xF0B76A].map { Color(hex: $0) })
 
     /// Slightly deeper fills so badges still stand out on cream paper; the text stays dark.
     static let light = BadgePalette(
         text: Color(hex: 0x1F1A15),
-        tagFills: [
-            "Foundations": Color(hex: 0x93B6F2),
-            "Trustworthy AI": Color(hex: 0xF29BB9),
-            "Phase I": Color(hex: 0xF2C25C),
-            "Phase II": Color(hex: 0xADD575),
-            "Phase III": Color(hex: 0x76CBDD),
-            "Phase IV": Color(hex: 0xB9A0F2),
-            "Phase V": Color(hex: 0xF29E70),
-            "Phase VI": Color(hex: 0x72D9B3),
-        ],
-        extraFills: [Color(hex: 0xD9C48F), Color(hex: 0x9CC2BC), Color(hex: 0xD3A6DA), Color(hex: 0xC0C585)],
-        pmi: Color(hex: 0xD3C7B4),
-        course: Color(hex: 0xE8A64F),
-        otherSource: Color(hex: 0xBCC0CC))
+        tagFills: [0x93B6F2, 0xF29BB9, 0xF2C25C, 0xADD575, 0x76CBDD, 0xB9A0F2, 0xF29E70, 0x72D9B3].map { Color(hex: $0) },
+        extraFills: [0xD9C48F, 0x9CC2BC, 0xD3A6DA, 0xC0C585].map { Color(hex: $0) },
+        sourceFills: [0xBCC0CC, 0xD3C7B4, 0xE8A64F].map { Color(hex: $0) })
 }
 
 /// A solid badge with dark text, for a tag or a source.
@@ -271,12 +250,8 @@ struct SourceBadge: View {
     }
 
     static func label(for source: String) -> String? {
-        switch source.lowercased() {
-        case "pmi": "PMI Glossary"
-        case "course": "Course"
-        case "": nil
-        default: source
-        }
+        let trimmed = source.trimmingCharacters(in: .whitespaces)
+        return trimmed.isEmpty ? nil : trimmed
     }
 }
 

@@ -8,7 +8,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var hotKey: HotKey?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        LegacyMigration.run()
         store = GlossaryStore()
         model = GlossaryViewModel(store: store)
         statusItem = StatusItemController(model: model)

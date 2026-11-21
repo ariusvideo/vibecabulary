@@ -39,7 +39,7 @@ public enum GlossaryLoader {
         return try validated(doc)
     }
 
-    static func decodeJSON(_ text: String) throws -> GlossaryDocument {
+    public static func decodeJSON(_ text: String) throws -> GlossaryDocument {
         let data = Data(text.utf8)
         do {
             return try JSONDecoder().decode(GlossaryDocument.self, from: data)
@@ -62,7 +62,7 @@ public enum GlossaryLoader {
     }
 
     /// Trims fields, drops incomplete entries, and keeps the first of any duplicate terms.
-    static func validated(_ doc: GlossaryDocument) throws -> GlossaryDocument {
+    public static func validated(_ doc: GlossaryDocument) throws -> GlossaryDocument {
         var seen = Set<String>()
         var out = doc
         out.terms = doc.terms.compactMap { entry in

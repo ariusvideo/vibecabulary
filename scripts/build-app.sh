@@ -6,14 +6,23 @@ cd "$(dirname "$0")/.."
 
 NAME=Vibecabulary
 APP=build/$NAME.app
-VERSION=1.0
+VERSION=1.0.0
+BUILD=1
+MIN_MACOS=14.0
 
-swift build -c release --product Glossary
-BIN="$(swift build -c release --show-bin-path)/Glossary"
+# Universal binary: build each architecture separately, then combine them with lipo.
+for ARCH in arm64 x86_64; do
+  swift build -c release --product Glossary --triple "$ARCH-apple-macosx$MIN_MACOS" \
+    --scratch-path ".build/$ARCH"
+done
+BIN_ARM="$(swift build -c release --triple arm64-apple-macosx$MIN_MACOS --scratch-path .build/arm64 --show-bin-path)/Glossary"
+BIN_X86="$(swift build -c release --triple x86_64-apple-macosx$MIN_MACOS --scratch-path .build/x86_64 --show-bin-path)/Glossary"
 
 rm -rf "$APP"
+mkdir -p build && touch build/.metadata_never_index  # keep this staging copy out of Spotlight
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp "$BIN" "$APP/Contents/MacOS/$NAME"
+lipo -create "$BIN_ARM" "$BIN_X86" -output "$APP/Contents/MacOS/$NAME"
+lipo -info "$APP/Contents/MacOS/$NAME"
 cp Resources/sample-glossary.json "$APP/Contents/Resources/"
 
 if [[ ! -f build/AppIcon.icns ]]; then
@@ -34,10 +43,11 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>$VERSION</string>
-  <key>CFBundleVersion</key><string>$VERSION</string>
-  <key>LSMinimumSystemVersion</key><string>14.0</string>
+  <key>CFBundleVersion</key><string>$BUILD</string>
+  <key>LSMinimumSystemVersion</key><string>$MIN_MACOS</string>
   <key>LSUIElement</key><true/>
   <key>NSHighResolutionCapable</key><true/>
+  <key>NSHumanReadableCopyright</key><string>© 2026 Steven Gladney. MIT License.</string>
 </dict>
 </plist>
 PLIST

@@ -15,7 +15,7 @@ public struct GlossaryEntry: Codable, Hashable, Identifiable, Sendable {
     public var term: String
     public var aliases: [String]
     public var definition: String
-    /// "PMI", "Course", or any label another glossary wants to show as a badge.
+    /// Any label the glossary wants to show as a badge, e.g. "Course" or a book title.
     public var source: String?
     public var citation: String?
     public var notes: [Note]
@@ -79,11 +79,23 @@ public struct GlossaryEntry: Codable, Hashable, Identifiable, Sendable {
 public struct GlossaryDocument: Codable, Sendable {
     public var name: String
     public var version: String?
+    /// Optional: the glossary's tags in the order the app should list and color them.
+    public var tags: [String]?
     public var terms: [GlossaryEntry]
 
-    public init(name: String, version: String? = nil, terms: [GlossaryEntry]) {
+    public init(name: String, version: String? = nil, tags: [String]? = nil, terms: [GlossaryEntry]) {
         self.name = name
         self.version = version
+        self.tags = tags
         self.terms = terms
+    }
+
+    /// Tags in display order: the file's declared order first, then any others A–Z.
+    public var orderedTags: [String] {
+        let used = Set(terms.flatMap(\.tags))
+        var seen = Set<String>()
+        let declared = (tags ?? []).filter { used.contains($0) && seen.insert($0).inserted }
+        let rest = used.subtracting(declared).sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+        return declared + rest
     }
 }

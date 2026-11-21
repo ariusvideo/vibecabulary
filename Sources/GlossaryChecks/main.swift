@@ -1,7 +1,7 @@
 // Checks for GlossaryCore. Run with `swift run GlossaryChecks`.
 // (Command Line Tools ship without XCTest or Swift Testing, so this is a plain executable.)
 import Foundation
-@testable import GlossaryCore
+import GlossaryCore
 
 nonisolated(unsafe) var failures = 0
 nonisolated(unsafe) var checks = 0
@@ -137,6 +137,20 @@ struct ImporterTests {
         expect(!String(decoding: untagged, as: UTF8.self).contains("tags"), "empty tags should not be encoded")
         let bare = try GlossaryLoader.decodeJSON(#"{"name":"T","terms":[{"term":"a","definition":"b"}]}"#)
         expect(bare.terms[0].tags == [])
+    }
+
+    func declaredTagOrder() throws {
+        let doc = try GlossaryLoader.decodeJSON(#"""
+        {"name":"T","tags":["Zeta","Alpha","Unused","Zeta"],"terms":[
+          {"term":"a","definition":"d","tags":["Alpha"]},{"term":"b","definition":"d","tags":["Beta"]},
+          {"term":"c","definition":"d","tags":["Zeta"]}]}
+        """#)
+        expect(doc.orderedTags == ["Zeta", "Alpha", "Beta"], "\(doc.orderedTags)")
+        let undeclared = GlossaryDocument(name: "T", terms: [GlossaryEntry(term: "a", definition: "d", tags: ["b10"]),
+                                                             GlossaryEntry(term: "b", definition: "d", tags: ["b9"])])
+        expect(undeclared.orderedTags == ["b9", "b10"])
+        let encoded = String(decoding: try JSONEncoder().encode(undeclared), as: UTF8.self)
+        expect(!encoded.contains("\"tags\":null"), "undeclared order should not be encoded")
     }
 
     /// The examples inside the AI prompt must load, or chatbots would copy a format the app rejects.
@@ -328,6 +342,7 @@ importers.markdownHeadings()
 importers.markdownListItems()
 try importers.jsonRoundTripAndValidation()
 try importers.tagsRoundTrip()
+try importers.declaredTagOrder()
 try importers.promptExamplesLoad()
 try importers.bundledSampleGlossaryLoads()
 try importers.cpmaiGlossaryLoadsIfPresent()

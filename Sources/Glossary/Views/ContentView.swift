@@ -12,7 +12,11 @@ struct ContentView: View {
         self.store = model.store
     }
 
-    private var theme: GlossaryTheme { themeID.theme }
+    private var theme: GlossaryTheme {
+        var t = themeID.theme
+        t.badges.tagOrder = store.availableTags
+        return t
+    }
 
     var body: some View {
         VStack(spacing: 0) {
