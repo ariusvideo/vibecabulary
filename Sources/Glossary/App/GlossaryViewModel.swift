@@ -35,7 +35,8 @@ final class GlossaryViewModel: ObservableObject {
     @Published private(set) var copiedFlash = false
 
     var closePopover: () -> Void = {}
-    var pinPopover: (Bool) -> Void = { _ in }
+    /// Runs an open/save panel in front of the popover and returns the response.
+    var runPanel: (NSSavePanel) -> NSApplication.ModalResponse = { $0.runModal() }
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -220,9 +221,7 @@ final class GlossaryViewModel: ObservableObject {
         panel.allowedContentTypes = GlossaryLoader.supportedExtensions.compactMap { UTType(filenameExtension: $0) }
         panel.allowsMultipleSelection = false
         panel.directoryURL = store.sourceURL.deletingLastPathComponent()
-        pinPopover(true)
-        let response = panel.runModal()
-        pinPopover(false)
+        let response = runPanel(panel)
         guard response == .OK, let url = panel.url else { return }
         settingsMessage = store.load(url) ? "Loaded \(store.document.terms.count) terms." : nil
     }
@@ -255,9 +254,7 @@ final class GlossaryViewModel: ObservableObject {
         panel.title = "Export Tag Edits"
         panel.nameFieldStringValue = "tag-edits-export.json"
         panel.allowedContentTypes = [.json]
-        pinPopover(true)
-        let response = panel.runModal()
-        pinPopover(false)
+        let response = runPanel(panel)
         guard response == .OK, let url = panel.url else { return }
         do {
             try store.exportTagEdits(to: url)

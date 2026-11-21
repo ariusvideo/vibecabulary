@@ -34,7 +34,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         popover.contentViewController = host
 
         model.closePopover = { [weak self] in self?.close() }
-        model.pinPopover = { [weak self] pinned in self?.popover.behavior = pinned ? .applicationDefined : .transient }
+        model.runPanel = { [weak self] panel in self?.runPanel(panel) ?? panel.runModal() }
     }
 
     @objc private func togglePopover(_ sender: Any?) { toggle() }
@@ -60,6 +60,25 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         popover.contentViewController?.view.window?.makeKey()
         startKeyMonitor()
+    }
+
+    /// The popover's window sits at a high window level, and the open/save panel is drawn by a
+    /// separate system process, so setting the panel's level doesn't help: it still opens behind
+    /// the popover, and being modal it leaves the popover unclickable. Instead, drop the popover
+    /// to a normal level while the panel is up, then put it back.
+    private func runPanel(_ panel: NSSavePanel) -> NSApplication.ModalResponse {
+        popover.behavior = .applicationDefined
+        let popoverWindow = popover.contentViewController?.view.window
+        let savedLevel = popoverWindow?.level
+        popoverWindow?.level = .normal
+        defer {
+            if let savedLevel { popoverWindow?.level = savedLevel }
+            popover.behavior = .transient
+            popoverWindow?.makeKey()
+        }
+        NSApp.activate(ignoringOtherApps: true)
+        DispatchQueue.main.async { panel.orderFrontRegardless(); panel.makeKey() }
+        return panel.runModal()
     }
 
     func close() {
