@@ -5,6 +5,14 @@
 Click the `{v}` in the menu bar, or press **⌥⌘G**, and start typing. Bring your own glossary (JSON, CSV or Markdown),
 or have any AI chatbot make one for you from your notes. Requires macOS 14 or later; a universal app for Apple silicon and Intel Macs.
 
+**Website:** [vibecabulary.app](https://vibecabulary.app) · **Download:** [Vibecabulary.dmg](https://github.com/ariusvideo/vibecabulary/releases/latest/download/Vibecabulary.dmg) (free; signed and notarized by Apple) · **Support:** support@vibecabulary.app · **Tip jar:** [Ko-fi](https://ko-fi.com/ariusvideo)
+
+## Install
+1. Download `Vibecabulary.dmg` from the [latest release](https://github.com/ariusvideo/vibecabulary/releases/latest).
+2. Open it and drag **Vibecabulary** to **Applications**.
+3. Open Vibecabulary. It lives in the menu bar (no Dock icon); click the `{v}` icon or press **⌥⌘G**.
+
+## Using it
 | Key | Action |
 |---|---|
 | type | live matches on term name, aliases, then definition text (2+ chars) |
@@ -14,11 +22,13 @@ or have any AI chatbot make one for you from your notes. Requires macOS 14 or la
 | ⌘, | settings: choose glossary file, reload, launch at login |
 | Esc | clear the field, then back to recents, then close |
 
-## Build and install
+## Build from source
 Needs only the Swift toolchain (Xcode Command Line Tools); no Xcode project. Bundle ID `com.vibecabulary.app`.
 ```
-scripts/build-app.sh            # release build -> build/Vibecabulary.app -> /Applications
+scripts/build-app.sh            # universal release build -> build/Vibecabulary.app -> /Applications
 swift run GlossaryChecks        # search/importer checks (CLT has no XCTest)
+scripts/release.sh              # signed + notarized build/release/Vibecabulary.dmg (needs a Developer ID
+                                # certificate and a notarytool profile; see the script header)
 ```
 
 ## Glossary files
